@@ -1,15 +1,17 @@
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
+#include <iostream>
+
 class Individual
 {
 private:
+
+public:
   int MA1;
   int MA2;
 
   double retorno;
-
-public:
 
 // Construtores //////////////////
   Individual();
