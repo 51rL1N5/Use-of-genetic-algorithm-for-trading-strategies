@@ -3,6 +3,9 @@
 #include <exception.h>
 
 #include <iostream>
+#include <vector>
+#include <fstream>
+#include <cassert>
 
 // Define utils /////////////////////////////
 #define MIN_SIZE_ERROR "Erro no tamanho"
@@ -127,6 +130,27 @@ Stock Stock::sample(int inicio, int fim)
   }
 
   return S;
+}
+
+void Stock::movingAverage(int MA_TAM, std::string filename)
+{
+  double MA[filled] = { 0.00 };
+
+  for (int i = 0; i < filled; i++)
+  {
+    for (int j = 0; j < MA_TAM; j++)
+      MA[i] += (this->data[std::max(i - j, j)].getPreco())/(MA_TAM+1);
+  }
+
+
+  std::ofstream file(filename);
+
+  assert(file.is_open());
+
+  for (int i = 0; i < filled; i++)
+    file << this->data[i].getData() << ", " <<MA[i] << std::endl;
+
+  file.close();
 }
 
 ///////////////////////////////////////////////

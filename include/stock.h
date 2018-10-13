@@ -33,6 +33,7 @@ public:
 
 // Visualizacao ///////////////////////////////////
 
+void movingAverage(int MA_TAM, std::string filename);
 friend std::ostream& operator<<(std::ostream& ostream, Stock& s);
 
 

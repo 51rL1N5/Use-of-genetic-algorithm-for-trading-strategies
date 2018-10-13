@@ -3,6 +3,7 @@
 #include <individual.h>
 #include <exception.h>
 #include <quote.h>
+#include <omp.h>
 
 #include <iostream>
 #include <cmath>
@@ -24,6 +25,10 @@ Population::Population(Stock S, int s, int ma)
   this->max_ma = ma;
 
   this->individuos = new Individual[this->size];
+
+  for (int i = 0; i < this->size; i++)
+    individuos[i] = Individual(0,0);
+
 }
 /////////////////////////////////////
 
@@ -61,8 +66,11 @@ double Population::fitness(Stock& s, int ind, int inicio)
 
   for (int i = inicio; i < s.getFilled() - 1; i++)
   {
+    int inicio1 = i - individuos[ind].MA1 + 1;
+    int inicio2 = i - individuos[ind].MA2 + 1;
+
     // atualizar retorno da estrategia
-    if (s.sample(i - individuos[ind].MA1 + 1, i).mean() > s.sample(i - individuos[ind].MA2 + 1, i).mean())
+    if (s.sample(std::min(inicio1, i), i).mean() > s.sample(std::min(inicio2, i), i).mean())
     {
       retorno *= s.getData(i + 1).getPreco() /  s.getData(i).getPreco();
     }
@@ -84,7 +92,7 @@ double Population::retorno(int ind)
 
   double retorno = 1;
 
-  for (int i = max_ma; i < acao.getFilled() -1 ; i++)
+  for (int i = max_ma; i < acao.getFilled() - 1; i++)
   {
 
     if (acao.sample(i - individuos[ind].MA1 + 1 , i).mean() > acao.sample(i - individuos[ind].MA2 + 1, i).mean() )
@@ -96,7 +104,6 @@ double Population::retorno(int ind)
       retorno *= acao.getData(i).getPreco()/acao.getData(i+1).getPreco();
     }
   }
-
   return retorno;
 }
 
@@ -124,7 +131,24 @@ Population Population::top20(int TAM_INTERVAL)
   for (int i = 0; i < filled; i++)
     individuos[i].retorno = fitness(S, i, max_ma);
 
-  std::sort(individuos, individuos + top20 - 1, [](Individual a, Individual b){
+
+
+  for (int i=0; i<top20; i++)
+  {
+  	for (int j=i+1; j<filled; j++)
+    {
+  		if (individuos[j].retorno>individuos[i].retorno)
+      {
+  			// Switch values between organisms[i] and organisms[j]
+  			Individual temp=individuos[i];
+  			individuos[i]=individuos[j];
+  			individuos[j]=temp;
+  		}
+  	}
+  	pop.addIndividual(individuos[i]);
+  }
+/*
+  std::sort(individuos, individuos + filled - 1, [](Individual a, Individual b){
     return a.retorno >= b.retorno;
   });
 
@@ -132,7 +156,7 @@ Population Population::top20(int TAM_INTERVAL)
   {
     pop.addIndividual(individuos[i]);
   }
-
+*/
   return pop;
 }
 
@@ -161,7 +185,7 @@ void Population::crossover(int TAM_INTERVAL)
       addIndividual(Individual(melhores.individuos[r2].MA1, melhores.individuos[r1].MA2));
   }
 
-  melhores.assassinar();
+//  melhores.assassinar();
 }
 
 void Population::mutation(double MUTATION_PROBABILITY)
@@ -170,7 +194,9 @@ void Population::mutation(double MUTATION_PROBABILITY)
 
   // Assim como na selecao natural, apenas as criancas sofrerao
   // mutacao, pois a mutacao é um aspecto intrisseco a reproducao
-
+#pragma omp parallel
+{
+#pragma omp for
   for (int i = top20; i < filled; i++)
   {
     // Vamos fazer que as medias moveis tenham chance
@@ -191,6 +217,7 @@ void Population::mutation(double MUTATION_PROBABILITY)
        { i--; break; }
     }
   }
+}
 
 }
 /////////////////////////////////////
