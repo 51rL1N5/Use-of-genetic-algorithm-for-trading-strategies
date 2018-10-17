@@ -73,7 +73,7 @@ double Population::fitness(Stock & s, int ind, int inicio)
     int inicio2 = i - individuos[ind]->Mshort + 1;
 
     // atualizar retorno da estrategia
-    if (s.sample(std::min(inicio1, i), i ).mean() > s.sample(std::min(inicio2, i), i).mean())
+    if (s.sample(std::max(inicio1, 0), i ).mean() > s.sample(std::max(inicio2,0), i).mean())
       retorno += s.data[i + 1]->open - s.data[i + 1]->close;
     else
       retorno += s.data[i + 1]->close - s.data[i + 1]->open;
@@ -99,7 +99,7 @@ double Population::retorno(int ind)
     int inicio2 = i - individuos[ind]->Mshort + 1;
 
     // atualizar retorno da estrategia
-    if (acao.sample(std::max(inicio1, 0), i).mean() > acao.sample(std::max(inicio2, i), i).mean())
+    if (acao.sample(std::max(inicio1, 0), i).mean() > acao.sample(std::max(inicio2, 0), i).mean())
       retorno += acao.data[i + 1]->open - acao.data[i + 1]->close;
     else
       retorno += acao.data[i + 1]->close - acao.data[i + 1]->open;
@@ -126,7 +126,7 @@ Population Population::top20(int TAM_INTERVAL)
   int r = rand()%(acao.getFilled() - TAM_INTERVAL);
 
   // Calcular o fitness dos individuos
-  
+
   Stock S = acao.sample(std::max(0, r - max_ma), r + TAM_INTERVAL);
 
   for (int i = 0; i < filled; i++)
