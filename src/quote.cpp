@@ -5,26 +5,44 @@
 
 /// Construtor ////////////////////////////////////
 
-Quote::Quote(){};
-
-Quote::Quote(std::string nome, double preco, std::string data)
-{
-  this->nome  = nome;
-  this->preco = preco;
-  this->data = data;
+Quote(std::string nome){
+    this->nome  = nome;
+    this->open = 0;
+    this->close = 0;
+    this->high = 0;
+    this->low = 0;
+    this->adjclose = 0;
+    this->volume = 0;
+    this->data = 0;
 }
 
+Quote(std::string nome,std::string data,double open,double close,double high,double low,double adjclose,double volume){
+    this->nome  = nome;
+    this->open = open;
+    this->close = close;
+    this->high = high;
+    this->low = low;
+    this->adjclose = adjclose;
+    this->volume = volume;
+    this->data = data;
+}
+
+Quote(std::string nome,std::string data,double open,double close,double adjclose){
+    this->nome  = nome;
+    this->open = open;
+    this->close = close;
+    this->high = 0;
+    this->low = 0;
+    this->adjclose = adjclose;
+    this->volume = 0;
+    this->data = data;
+}
 ///////////////////////////////////////////////////
-
-
 
 /// Get e set dos atributos ///////////////////////
 
 std::string Quote::getNome() { return this->nome; }
 void Quote::setNome(std::string nome) { this->nome = nome; }
-
-double Quote::getPreco() { return preco; }
-void Quote::setPreco(double preco) { this->preco = preco; }
 
 std::string Quote::getData() { return this->data; }
 void Quote::setData( std::string data ) { this->data = data; }
@@ -47,6 +65,11 @@ std::ostream& operator<<(std::ostream& ostream, Quote& q)
 {
   ostream << "Nome: " << q.getNome() << "\nPreco: " << q.getPreco() << "\nData: " << q.getData() << std::endl;
   return ostream;
+}
+
+std::istream& operator>>(std::istream& is, Quote& q){
+    is >> data >> open >> close >> high >> low >> adjclose >> volume;
+    return is;
 }
 
 ///////////////////////////////////////////////////

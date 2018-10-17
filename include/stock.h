@@ -3,13 +3,12 @@
 
 #include <iostream>
 #include "quote.h"
-
+#include <vector>
 class Stock
 {
 private:
   std::string nome;                  // nome da acao
-  Quote* data;                        // dados associados a ela
-
+  std::vector<Quote*> data;          // dados associados a ela
   int size;
   int filled = 0;
 public:
@@ -27,7 +26,6 @@ public:
   void addData(Quote q);
   void popLeft();
   double mean();
-  Stock sample(int inicio, int fim);
 
 // Visualizacao ///////////////////////////////////
 

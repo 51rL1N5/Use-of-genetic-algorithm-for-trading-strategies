@@ -3,28 +3,22 @@
 
 #include <iostream>
 
-
 class Quote{
-private:
-
-  double preco;
+public:
+  double open, close, high, low, adjclose, volume;
   std::string nome;
   std::string data;
 
-public:
-
   Quote();
-  Quote(std::string nome, double preco, std::string data);
-
+  Quote(std::string nome,std::string data,double open,double close,double high,double low,double adjclose,double volume);
+  Quote(std::string nome,std::string data,double open,double close,double adjclose);
+  Quote(std::string nome);
 
 /// Get e set dos atributos ////////////////////////////////
   std::string getNome();
   void setNome(std::string nome);
-  double getPreco();
-  void setPreco(double preco);
   std::string getData();
   void setData(std::string data);
-/////////////////////////////////////////////////////////////
 
 /// operadores sobre dados //////////////////////////////////
 void aumentarPreco(double incremento); // Aumenta o preco da acao
@@ -34,8 +28,8 @@ bool isNull();                         // Retorna true se a quote for nula (data
 
 /// Visualizacao /////////////////////////////////////////////
 friend std::ostream& operator<<(std::ostream& ostream, Quote&);
+friend std::istream& operator>>(std::istream& is, Quote&);
 //////////////////////////////////////////////////////////////
-
 };
 
 

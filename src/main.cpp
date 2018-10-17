@@ -33,38 +33,29 @@ Population randomPopulation(Stock S, const int max_population, const int max_ma)
   return pop;
 }
 
-void loadData(Stock& S, std::string file)
+Stock loadData(std::string file)
 {
-
-  std::ifstream input0(file.c_str());
-
-  assert(input0.is_open());
-
-  int lines = 0;
-  std::string date;
-  double price;
-
-  while (!input0.eof())
-  {
-    input0 >> date >> price;
-    lines ++;
-  }
-
-  input0.close();
-
-  S = Stock("S&P 500", lines);
 
   std::ifstream input(file.c_str());
 
   assert(input.is_open());
 
+  int lines = 0;
+
+  Stock S("S&P 500", lines);
+  Quote q("S&P 500");
+  std::string s;
+  std::getline(input,s,'\n');
   while (!input.eof())
   {
-    input >> date >> price;
-    S.addData(Quote(S.getNome(), price, date));
+    input >> q;
+    S.addData(q);
+    lines ++;
   }
 
   input.close();
+
+  return S;
 }
 
 

@@ -11,8 +11,8 @@ private:
 
 
 public:
-  Individual * individuos;
-  Stock        acao;
+  Individual  *individuos;
+  Stock       acao;
 
   int size;
   int filled;
