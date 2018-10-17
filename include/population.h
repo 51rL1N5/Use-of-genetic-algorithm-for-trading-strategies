@@ -26,7 +26,7 @@ public:
   ~Population();
   int getFilled();
 // Operadores sobre a populacao///
-  void addIndividual(Individual ind);
+  void addIndividual(Individual *ind);
   void assassinar();
 
   double fitness(Stock& s, int fim, int inicio);  // Calcula o fit dos individuos

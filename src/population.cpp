@@ -39,8 +39,11 @@ int Population::getFilled() { return this->filled; }
 
 // Operadores sobre a populacao /////
 
-void Population::addIndividual(Individual ind)
-{ this->individuos[filled] = &ind; filled++;}
+void Population::addIndividual(Individual *ind)
+{
+
+  this->individuos[filled] = ind; filled++;
+}
 
 void Population::assassinar()
 { delete this; }
