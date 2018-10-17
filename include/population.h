@@ -11,8 +11,8 @@ private:
 
 
 public:
-  Individual  *individuos;
-  Stock       acao;
+  std::vector<Individual*> individuos;
+  Stock acao;
 
   int size;
   int filled;
@@ -20,7 +20,7 @@ public:
 
 // Construtores //////////////////
   Population();
-  Population(Stock & S, int s, int ma);
+  Population(Stock S, int s, int ma);
 //////////////////////////////////
 
   ~Population();

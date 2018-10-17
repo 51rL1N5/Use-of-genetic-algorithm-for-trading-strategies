@@ -1,22 +1,19 @@
 #include <quote.h>
-
 #include <iostream>
 
 
-/// Construtor ////////////////////////////////////
-
-Quote(std::string nome){
-    this->nome  = nome;
+Quote::Quote(std::string _nome){
+    this->nome = _nome;
     this->open = 0;
     this->close = 0;
     this->high = 0;
     this->low = 0;
     this->adjclose = 0;
     this->volume = 0;
-    this->data = 0;
+    this->data = "0000/00/00";
 }
 
-Quote(std::string nome,std::string data,double open,double close,double high,double low,double adjclose,double volume){
+Quote::Quote(std::string nome,std::string data,double open,double close,double high,double low,double adjclose,int volume){
     this->nome  = nome;
     this->open = open;
     this->close = close;
@@ -27,7 +24,7 @@ Quote(std::string nome,std::string data,double open,double close,double high,dou
     this->data = data;
 }
 
-Quote(std::string nome,std::string data,double open,double close,double adjclose){
+Quote::Quote(std::string nome,std::string data,double open,double close,double adjclose){
     this->nome  = nome;
     this->open = open;
     this->close = close;
@@ -51,8 +48,6 @@ void Quote::setData( std::string data ) { this->data = data; }
 
 
 /// operadores sobre dados ////////////////////////
-void Quote::aumentarPreco(double incremento) { this->preco += incremento; }
-void Quote::addRetorno(double incremento) { this->preco *= 1 + incremento; }
 
 bool Quote::isNull() { return this->data == "0000/00/00"; }
 
@@ -63,12 +58,12 @@ bool Quote::isNull() { return this->data == "0000/00/00"; }
 
 std::ostream& operator<<(std::ostream& ostream, Quote& q)
 {
-  ostream << "Nome: " << q.getNome() << "\nPreco: " << q.getPreco() << "\nData: " << q.getData() << std::endl;
+  ostream << "Nome: " << q.nome << "\nOpen: " << q.open <<"\nClose: " << q.close <<  "\nData: " << q.getData() << std::endl;
   return ostream;
 }
 
 std::istream& operator>>(std::istream& is, Quote& q){
-    is >> data >> open >> close >> high >> low >> adjclose >> volume;
+    is >> q.data >> q.open >> q.close >> q.high >> q.low >> q.adjclose >> q.volume;
     return is;
 }
 

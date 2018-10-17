@@ -14,16 +14,17 @@ private:
 public:
 
   Stock();                          // constructor
-  Stock(std::string nome, int size);
+  Stock(std::string nome);
+  ~Stock();
 
 // Set e get //////////////////////////////////////
   std::string getNome();
   int getFilled();
-  Quote getData(int i);
+
 ///////////////////////////////////////////////////
 
 // Operadores sobre a acao ////////////////////////
-  void addData(Quote q);
+  void addData(Quote *q);
   void popLeft();
   double mean();
 

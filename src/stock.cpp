@@ -17,24 +17,20 @@
 // Construtores /////////////////////////////
 Stock::Stock(){}
 
-Stock::Stock(std::string nome, int size)
+Stock::Stock(std::string nome)
 {
   // tratar excessao possível
-  if (size < 1) throw Error(MIN_SIZE_ERROR, "O tamanho dos dados deve ser, pelo menos, igual a 1");
+  //if (size < 1) throw Error(MIN_SIZE_ERROR, "O tamanho dos dados deve ser, pelo menos, igual a 1");
 
   this->nome = nome;
-  this->size = size;
+  //this->size = size;
 
-  // inicializando os dados como zero
-  for(int i = 0; i < size; i++)
-    this->data[i].pushback(new Quote(nome, 0.00, "0000/00/00"));
-    data.shrink_to_fit();
 }
 
 
 Stock::~Stock(){
-    for(auto it : data)
-      delete *it;
+    for(int i=0;i<data.size();i++)
+        delete data[i];
 }
 
 ///////////////////////////////////////////////
@@ -44,13 +40,11 @@ std::string Stock::getNome() { return this->nome; }
 
 int Stock::getFilled() { return this->filled; }
 
-Quote Stock::getData(int i) { return this->data[i];}
-
 ///////////////////////////////////////////////
 
 // Operadores sobre acao //////////////////////
 
-void Stock::addData(Quote q)
+void Stock::addData(Quote *q)
 {
   // // tratar excessao
   // if(filled >= size) throw Error(MAX_SIZE_ERROR, "tentativa de adicionar mais dados do que o declarado");
@@ -76,6 +70,7 @@ void Stock::addData(Quote q)
   // }
   //
   // filled++;
+  data.push_back(q);
 }
 
 void Stock::popLeft()
@@ -155,12 +150,12 @@ std::ostream& operator<<(std::ostream& ostream, Stock& q)
   //
   // ostream << "  Date\t\t Price\n ------\t\t------\n\n";
   //
-  // for (int i = 0; i < q.size; i++)
-  // {
-  //   if (q.data[i].isNull())
-  //     continue;
-  //   ostream << q.data[i].getData() << "\t" << q.data[i].getPreco() << std::endl;
-  // }
+  for (auto it : q.data)
+  {
+    if (it->isNull())
+      continue;
+    ostream << it;
+  }
 
   return ostream;
 }

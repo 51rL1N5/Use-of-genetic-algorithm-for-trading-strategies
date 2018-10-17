@@ -5,12 +5,13 @@
 
 class Quote{
 public:
-  double open, close, high, low, adjclose, volume;
+  double open, close, high, low, adjclose;
+  int volume;
   std::string nome;
   std::string data;
 
   Quote();
-  Quote(std::string nome,std::string data,double open,double close,double high,double low,double adjclose,double volume);
+  Quote(std::string nome,std::string data,double open,double close,double high,double low,double adjclose,int volume);
   Quote(std::string nome,std::string data,double open,double close,double adjclose);
   Quote(std::string nome);
 
