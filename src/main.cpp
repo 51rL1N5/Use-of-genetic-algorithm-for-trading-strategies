@@ -18,7 +18,7 @@
 using namespace std;
 
 // Assinatura de funcoes uteis //////////////
-void loadData(Stock& S, std::string file);
+Stock loadData(std::string file);
 Population randomPopulation(Stock S, const int max_population, const int max_ma);
 Population geneticAlgorithm(Stock teste, Stock S, const int max_population, const int max_ma, const int number_generations, const int TAM_INTERVAL, const double MUTATION_PROBABILITY);
 /////////////////////////////////////////////
@@ -38,34 +38,19 @@ Stock loadData(std::string file)
 {
 
   std::ifstream input(file.c_str());
-
   assert(input.is_open());
 
   int lines = 0;
   Stock S("S&P 500");
   Quote q("S&P 500");
-  std::stringstream ss;
   std::string s;
-  std::getline(input,s,'\n');
   while (input.good()){
-    //input >> q;
-    //input.ignore(256,'\n');
-    std::getline(input,s,'\n');
-    for(int i=0;i<s.length();i++){
-        if(s[i]==',') s[i] = ' ';
-    }
-
-    ss.str(s);
-    ss >> q;
-    //std::cout << ss.str() << '\n';
-    //std::cout << q;
+    input >> q;
     Quote *aux = new Quote(q);
     S.addData(aux);
     lines++;
   }
-
   input.close();
-
   return S;
 }
 
@@ -126,13 +111,8 @@ int main(int argc, char** argv)
   int TAM_INTERVAL             = atoi(argv[4]);
   double MUTATION_PROBABILITY  = stof(argv[5]);
 
-  Stock SP500 =loadData("GSPC.csv");
-
-  //Stock MA_SP500 loadData(dataTeste.dat");
-
-
-  std::cout << SP500;
-
+  Stock SP500 = loadData("GSPC.dat");
+  //Stock MA_SP500 = loadData("dataTeste.dat");
   //Population pop = geneticAlgorithm(MA_SP500,SP500.sample(0, floor(0.6 * SP500.getFilled())), POPULATION_SIZE, MAX_MOVING_AVERAGE, NUMBER_OF_GENERATIONS, TAM_INTERVAL, MUTATION_PROBABILITY);
 
   return 0;

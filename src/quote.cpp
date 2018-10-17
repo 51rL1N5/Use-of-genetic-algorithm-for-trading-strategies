@@ -59,13 +59,18 @@ bool Quote::isNull() { return this->data == "0000/00/00"; }
 
 std::ostream& operator<<(std::ostream& ostream, Quote& q)
 {
-  ostream << "Nome: " << q.nome << "\nOpen: " << q.open <<"\nClose: " << q.close <<  "\nData: " << q.getData() << std::endl;
+  ostream << "Nome: " << q.nome << "   Open: " << q.open <<"   Close: " << q.close <<  "  Data: " << q.getData()
+  << "volume: " << q.volume<< std::endl;
   return ostream;
 }
 
 std::istream& operator>>(std::istream& is, Quote& q){
-    is >> q.data >> q.open >> q.close >> q.high >> q.low >> q.adjclose ;//>> q.volume;
-    return is;
+  std::istream::sentry s(is);
+  if (s){
+    is >> q.data >> q.open >> q.close >> q.high >> q.low >> q.adjclose >> q.volume;
+
+  }
+  return is;
 }
 
 ///////////////////////////////////////////////////

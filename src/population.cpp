@@ -12,7 +12,6 @@
 
 // Define utils /////////////////////
 #define INDEX_ERROR "Erro em indice"
-/////////////////////////////////////
 
 // Construtores /////////////////////
 Population::Population() {}
@@ -27,7 +26,6 @@ Population::Population(Stock S, int s, int ma)
   for (int i = 0; i < this->size; i++)
     individuos.push_back(new Individual(0,0));
     individuos.shrink_to_fit();
-
 }
 /////////////////////////////////////
 

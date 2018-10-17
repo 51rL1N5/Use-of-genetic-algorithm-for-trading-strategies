@@ -23,7 +23,7 @@ Stock::Stock(std::string nome)
   //if (size < 1) throw Error(MIN_SIZE_ERROR, "O tamanho dos dados deve ser, pelo menos, igual a 1");
 
   this->nome = nome;
-  //this->size = size;
+  this->size = 0;
 
 }
 
@@ -46,56 +46,9 @@ int Stock::getFilled() { return this->filled; }
 
 void Stock::addData(Quote *q)
 {
-  // // tratar excessao
-  // if(filled >= size) throw Error(MAX_SIZE_ERROR, "tentativa de adicionar mais dados do que o declarado");
-  //
-  // if(q.getNome() != nome) throw Error(INCOHERENT_ID, "Nome da acao associada ao dado e incoerente");
-  //
-  // if (!filled)
-  //   this->data[filled] = q;
-  //
-  //
-  // for (int i = 0; i < filled; i++)
-  // {
-  //   if (this->data[i].getData() > q.getData())
-  //   {
-  //     this->data[filled] = this->data[i];
-  //     this->data[i] = q;
-  //     break;
-  //   }
-  //
-  //   if( i == filled - 1)
-  //     this->data[filled] = q;
-  //
-  // }
-  //
-  // filled++;
+  if(q == NULL) return;//Lançar erro talvez
   data.push_back(q);
-}
-
-void Stock::popLeft()
-{
-  // // Deletar o elemento mais antigo
-  //
-  // if (size == 1)
-  // {
-  //   this->data[0] = Quote(this->nome, 0.00, "0000/00/00");
-  //   this->filled = 0;
-  //   return;
-  // }
-  // else if (this->filled == 0)
-  // {
-  //   return;
-  // }
-  // else
-  // {
-  //   for (int i = 1; i < filled; i++)
-  //     this->data[i-1] = this->data[i];
-  //
-  //   this->data[filled-1] = Quote(nome, 0.00, "0000/00/00");
-  //   filled--;
-  // }
-
+  size++;
 }
 
 double Stock::mean()
