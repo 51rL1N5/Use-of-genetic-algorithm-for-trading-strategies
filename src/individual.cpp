@@ -1,5 +1,5 @@
 #include <individual.h>
-
+#include <exception.h>
 #include <iostream>
 
 // Construtores ///////////////////////////
@@ -7,8 +7,10 @@ Individual::Individual() {}
 
 Individual::Individual(int i, int j)
 {
-  this->MA1 = std::max(i,0);
-  this->MA2 = std::max(j,0);
+  if (i < 0 || j < 0) throw Error("Parametros invalidos","Tentativa de colocar media a longo prazo negativa");
+
+  this->Mlong = std::min(i,j);
+  this->Mshort = std::max(i,j);
   retorno   = 0.00;
 }
 ///////////////////////////////////////////
@@ -19,7 +21,7 @@ void Individual::killObject()
   delete this;
 }
 
-bool Individual::isNull() { return MA1 == 0 && MA2 == 0; }
+bool Individual::isNull() { return Mshort == 0 && Mlong == 0; }
 //////////////////////////////////////////
 
 // Visualizacao //////////////////////////

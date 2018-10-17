@@ -29,7 +29,7 @@ public:
   void addIndividual(Individual ind);
   void assassinar();
 
-  double fitness(Stock& s, int fim, int inicio);  // Calcula o fit dos individuos
+  double fitness(Stock & s, int fim, int inicio);  // Calcula o fit dos individuos
   double retorno(int ind);                        // Retorna o fit dos individuos
 
   Population top20(int TAM_INTERVAL);             // Retorna os 20% melhores individuos

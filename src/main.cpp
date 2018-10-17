@@ -55,48 +55,48 @@ Stock loadData(std::string file)
 }
 
 
-// Population geneticAlgorithm (Stock teste,Stock stock, const int max_population, const int max_ma, const int number_generations, const int TAM_INTERVAL, const double MUTATION_PROBABILITY)
-// {
-//
-//   std::ofstream output("resultados/retorno.csv", std::ofstream::out);
-//
-//   assert(output.is_open());
-//
-//   std::cout << "Criando uma populacao aleatoria de " << max_population << " individuos";
-//   Population pop = randomPopulation(stock, max_population, max_ma);
-//   std::cout << " Pronto" << '\n';
-//
-//   // Simulacao das geracoes
-//
-//   std::cout << "Comecando a simulacao" << '\n';
-//
-//   for ( int i = 1; i <= number_generations; i++)
-//   {
-//
-//     pop.crossover(TAM_INTERVAL);
-//
-//     pop.mutation(MUTATION_PROBABILITY);
-//
-//     std::cout << "\r" << "Geracao numero " << i << "/" <<number_generations << std::flush;
-//   //  output << i << "," << pop.individuos[0].retorno << std::flush;
-//   }
-//
-//   output.close();
-//
-//   std::cout << "\nCalculando o retorno dos organismos\n";
-//
-//   for (int j = 0; j < pop.filled; j++)
-//     pop.individuos[j].retorno =pop.retorno(j);
-//
-//
-//   teste.movingAverage(pop.individuos[0].MA1, "resultados/moving1.csv");
-//   teste.movingAverage(pop.individuos[0].MA2, "resultados/moving2.csv");
-//
-//   std::cout << (pop.top20(TAM_INTERVAL).individuos[0]) << '\n';
-//   std::cout << " Fim"<< std::endl;
-//
-//   return pop;
-// }
+Population geneticAlgorithm (Stock teste,Stock stock, const int max_population, const int max_ma, const int number_generations, const int TAM_INTERVAL, const double MUTATION_PROBABILITY)
+{
+
+  std::ofstream output("resultados/retorno.csv", std::ofstream::out);
+
+  assert(output.is_open());
+
+  std::cout << "Criando uma populacao aleatoria de " << max_population << " individuos";
+  Population pop = randomPopulation(stock, max_population, max_ma);
+  std::cout << " Pronto" << '\n';
+
+  // Simulacao das geracoes
+
+  std::cout << "Comecando a simulacao" << '\n';
+
+  for ( int i = 1; i <= number_generations; i++)
+  {
+
+    pop.crossover(TAM_INTERVAL);
+
+    pop.mutation(MUTATION_PROBABILITY);
+
+    std::cout << "\r" << "Geracao numero " << i << "/" <<number_generations << std::flush;
+  //  output << i << "," << pop.individuos[0].retorno << std::flush;
+  }
+
+  output.close();
+
+  std::cout << "\nCalculando o retorno dos organismos\n";
+
+  for (int j = 0; j < pop.filled; j++)
+    pop.individuos[j]->retorno =pop.retorno(j);
+
+
+  teste.movingAverage(pop.individuos[0]->Mshort, "resultados/movingShort.csv");
+  teste.movingAverage(pop.individuos[0]->Mlong, "resultados/movingLong.csv");
+
+  std::cout << (pop.top20(TAM_INTERVAL).individuos[0]) << '\n';
+  std::cout << " Fim"<< std::endl;
+
+  return pop;
+}
 
 /////////////////////////////////////////////
 
@@ -112,8 +112,8 @@ int main(int argc, char** argv)
   double MUTATION_PROBABILITY  = stof(argv[5]);
 
   Stock SP500 = loadData("GSPC.dat");
-  //Stock MA_SP500 = loadData("dataTeste.dat");
-  //Population pop = geneticAlgorithm(MA_SP500,SP500.sample(0, floor(0.6 * SP500.getFilled())), POPULATION_SIZE, MAX_MOVING_AVERAGE, NUMBER_OF_GENERATIONS, TAM_INTERVAL, MUTATION_PROBABILITY);
+  Stock MA_SP500 = loadData("dataTeste.dat");
+  Population pop = geneticAlgorithm(MA_SP500,SP500.sample(0, floor(0.6 * SP500.getFilled())), POPULATION_SIZE, MAX_MOVING_AVERAGE, NUMBER_OF_GENERATIONS, TAM_INTERVAL, MUTATION_PROBABILITY);
 
   return 0;
 }

@@ -6,12 +6,12 @@
 #include <vector>
 class Stock
 {
-private:
+public:
   std::string nome;                  // nome da acao
   std::vector<Quote*> data;          // dados associados a ela
   int size;
   int filled = 0;
-public:
+
 
   Stock();                          // constructor
   Stock(std::string nome);
@@ -26,6 +26,7 @@ public:
 // Operadores sobre a acao ////////////////////////
   void addData(Quote *q);
   void popLeft();
+  Stock sample(int inicio, int fim);
   double mean();
 
 // Visualizacao ///////////////////////////////////

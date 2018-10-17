@@ -8,8 +8,8 @@ class Individual
 private:
 
 public:
-  int MA1;
-  int MA2;
+  int Mshort;
+  int Mlong;
 
   double retorno;
 

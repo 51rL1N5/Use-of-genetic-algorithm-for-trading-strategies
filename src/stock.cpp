@@ -53,34 +53,55 @@ void Stock::addData(Quote *q)
 
 double Stock::mean()
 {
-  // if (!filled) return 0.0;
-  // double m = 0.0;
-  //
-  // for (int i = 0; i < filled; i++)
-  //   m+= this->data[i].getPreco();
-  //
-  // return m/filled;
+  if (!filled) return 0.0;
+
+  double m = data[0]->adjclose;
+
+  double alpha = 2 / (1 + filled);
+
+  for (int i = 0; i < data.size() ; i++)
+    m = alpha * (data[i]->adjclose) + (1 - alpha)*m;
+
+  return m;
+}
+
+Stock Stock::sample(int inicio, int fim)
+{
+  if (inicio > fim || inicio < 0 || fim >= filled)
+  {
+    std::cout << inicio << " " << fim  <<'\n';
+    throw Error(INDEX_ERROR, "Erro na definicao de inicio (" +std::to_string(inicio)+ ") e fim (" +std::to_string(fim)+ ")");
+  }
+
+  Stock S(this->nome);
+
+  for (int i = inicio; i <= fim; i++)
+  {
+    S.addData(this->data[i]);
+  }
+
+  return S;
 }
 
 void Stock::movingAverage(int MA_TAM, std::string filename)
 {
-  // double MA[filled] = { 0.00 };
-  //
-  // for (int i = 0; i < filled; i++)
-  // {
-  //   for (int j = 0; j < MA_TAM; j++)
-  //     MA[i] += (this->data[std::max(i - j, j)].getPreco())/(MA_TAM+1);
-  // }
-  //
-  //
-  // std::ofstream file(filename);
-  //
-  // assert(file.is_open());
-  //
-  // for (int i = 0; i < filled; i++)
-  //   file << this->data[i].getData() << ", " <<MA[i] << std::endl;
-  //
-  // file.close();
+  double MA[filled] = { 0.00 };
+
+  MA[0] = this->data[0]->adjclose;
+
+  double alpha = 2 / (1 + MA_TAM);
+
+  for (int i = 1; i < filled; i++)
+    MA[i] = alpha * this->data[i]->adjclose + (1 - alpha) * MA[i-1];
+
+  std::ofstream file(filename);
+
+  assert(file.is_open());
+
+  for (int i = 0; i < filled; i++)
+    file << this->data[i]->getData() << ", " <<MA[i] << std::endl;
+
+  file.close();
 }
 
 ///////////////////////////////////////////////
