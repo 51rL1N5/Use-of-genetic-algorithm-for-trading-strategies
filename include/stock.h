@@ -17,7 +17,6 @@ public:
   Stock();                          // constructor
   Stock(std::string nome, int size);
 
-
 // Set e get //////////////////////////////////////
   std::string getNome();
   int getFilled();
@@ -29,7 +28,6 @@ public:
   void popLeft();
   double mean();
   Stock sample(int inicio, int fim);
-
 
 // Visualizacao ///////////////////////////////////
 

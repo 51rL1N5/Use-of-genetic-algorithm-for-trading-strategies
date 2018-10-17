@@ -17,7 +17,7 @@
 // Construtores /////////////////////
 Population::Population() {}
 
-Population::Population(Stock S, int s, int ma)
+Population::Population(Stock & S, int s, int ma)
 {
   this->size   =  s;
   this->acao  =  S;

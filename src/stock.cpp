@@ -132,6 +132,7 @@ Stock Stock::sample(int inicio, int fim)
   return S;
 }
 
+
 void Stock::movingAverage(int MA_TAM, std::string filename)
 {
   double MA[filled] = { 0.00 };

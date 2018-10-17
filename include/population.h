@@ -20,7 +20,7 @@ public:
 
 // Construtores //////////////////
   Population();
-  Population(Stock S, int s, int ma);
+  Population(Stock & S, int s, int ma);
 //////////////////////////////////
 
   ~Population();
