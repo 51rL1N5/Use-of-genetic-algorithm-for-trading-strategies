@@ -10,7 +10,6 @@ private:
 public:
   int MA1;
   int MA2;
-
   double retorno;
 
 // Construtores //////////////////
@@ -20,7 +19,6 @@ public:
 
 // Operadoes sobre organismo//////
   void killObject();
-
   bool isNull();
 //////////////////////////////////
 

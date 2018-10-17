@@ -112,6 +112,9 @@ int main(int argc, char** argv)
   double MUTATION_PROBABILITY  = stof(argv[5]);
 
   Stock SP500 = loadData("GSPC.dat");
+
+
+  //std::cout << SP500;
   //Stock MA_SP500 = loadData("dataTeste.dat");
   //Population pop = geneticAlgorithm(MA_SP500,SP500.sample(0, floor(0.6 * SP500.getFilled())), POPULATION_SIZE, MAX_MOVING_AVERAGE, NUMBER_OF_GENERATIONS, TAM_INTERVAL, MUTATION_PROBABILITY);
 

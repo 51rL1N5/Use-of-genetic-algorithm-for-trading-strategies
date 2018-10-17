@@ -68,7 +68,6 @@ std::istream& operator>>(std::istream& is, Quote& q){
   std::istream::sentry s(is);
   if (s){
     is >> q.data >> q.open >> q.close >> q.high >> q.low >> q.adjclose >> q.volume;
-
   }
   return is;
 }
