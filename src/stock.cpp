@@ -154,7 +154,7 @@ std::ostream& operator<<(std::ostream& ostream, Stock& q)
   {
     if (it->isNull())
       continue;
-    ostream << it;
+    ostream << *it;
   }
 
   return ostream;

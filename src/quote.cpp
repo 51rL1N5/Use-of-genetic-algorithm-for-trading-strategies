@@ -13,7 +13,7 @@ Quote::Quote(std::string _nome){
     this->data = "0000/00/00";
 }
 
-Quote::Quote(std::string nome,std::string data,double open,double close,double high,double low,double adjclose,int volume){
+Quote::Quote(std::string nome,std::string data,double open,double close,double high,double low,double adjclose,long long volume){
     this->nome  = nome;
     this->open = open;
     this->close = close;
@@ -34,6 +34,7 @@ Quote::Quote(std::string nome,std::string data,double open,double close,double a
     this->volume = 0;
     this->data = data;
 }
+
 ///////////////////////////////////////////////////
 
 /// Get e set dos atributos ///////////////////////
@@ -63,7 +64,7 @@ std::ostream& operator<<(std::ostream& ostream, Quote& q)
 }
 
 std::istream& operator>>(std::istream& is, Quote& q){
-    is >> q.data >> q.open >> q.close >> q.high >> q.low >> q.adjclose >> q.volume;
+    is >> q.data >> q.open >> q.close >> q.high >> q.low >> q.adjclose ;//>> q.volume;
     return is;
 }
 

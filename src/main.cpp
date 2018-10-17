@@ -42,7 +42,6 @@ Stock loadData(std::string file)
   assert(input.is_open());
 
   int lines = 0;
-
   Stock S("S&P 500");
   Quote q("S&P 500");
   std::stringstream ss;
@@ -58,11 +57,11 @@ Stock loadData(std::string file)
 
     ss.str(s);
     ss >> q;
-    std::cout << ss.str() << '\n';
+    //std::cout << ss.str() << '\n';
     //std::cout << q;
     Quote *aux = new Quote(q);
     S.addData(aux);
-    lines ++;
+    lines++;
   }
 
   input.close();
@@ -132,7 +131,7 @@ int main(int argc, char** argv)
   //Stock MA_SP500 loadData(dataTeste.dat");
 
 
-  //std::cout << SP500;
+  std::cout << SP500;
 
   //Population pop = geneticAlgorithm(MA_SP500,SP500.sample(0, floor(0.6 * SP500.getFilled())), POPULATION_SIZE, MAX_MOVING_AVERAGE, NUMBER_OF_GENERATIONS, TAM_INTERVAL, MUTATION_PROBABILITY);
 
