@@ -9,6 +9,7 @@
 #include <cmath>
 #include <algorithm>
 #include <fstream>
+#include <utility>
 
 // Define utils /////////////////////
 #define INDEX_ERROR "Erro em indice"
@@ -56,7 +57,7 @@ double Population::fitness(Stock& s, int ind, int inicio)
                              "-- Linha 35 da funcao fitness --"
                );
 
-  double retorno = 1;
+  double retorno = 0;
   // No lugar de calcularmos o retorno ao longo de todo o intervalo
   // de data disponivel, selecionaremos um intervalo especifico
   // dente os dados. Tal intervalo sera aleatorio.
@@ -66,18 +67,18 @@ double Population::fitness(Stock& s, int ind, int inicio)
 
   for (int i = inicio; i < s.getFilled() - 1; i++)
   {
-    int inicio1 = i - individuos[ind].MA1 + 1;
-    int inicio2 = i - individuos[ind].MA2 + 1;
+    int inicio1 = i - individuos[ind].long + 1;
+    int inicio2 = i - individuos[ind].short + 1;
+
+    int dist1 = std::distance(inicio1, i);
+    int dist2 = std::distance(inicio2, i);
 
     // atualizar retorno da estrategia
-    if (s.sample(std::min(inicio1, i), i).mean() > s.sample(std::min(inicio2, i), i).mean())
-    {
-      retorno *= s.getData(i + 1).getPreco() /  s.getData(i).getPreco();
-    }
+    if (s.mean(dados.begin() + inicio1, dados.begin() + i) > s.mean(dados.begin() + inicio2, dados.begin() + i))
+      retorno += s.dados[i + 1]->open - s.dados[i + 1]->close;
     else
-    {
-      retorno *= s.getData(i).getPreco() /  s.getData(i+1).getPreco();
-    }
+      retorno += s.dados[i + 1]->close - s.dados[i + 1]->open;
+
   }
 
   return retorno;
@@ -95,14 +96,18 @@ double Population::retorno(int ind)
   for (int i = max_ma; i < acao.getFilled() - 1; i++)
   {
 
-    if (acao.sample(i - individuos[ind].MA1 + 1 , i).mean() > acao.sample(i - individuos[ind].MA2 + 1, i).mean() )
-    {
-      retorno *= acao.getData(i+1).getPreco()/acao.getData(i).getPreco();
-    }
+    int inicio1 = i - individuos[ind].long + 1;
+    int inicio2 = i - individuos[ind].short + 1;
+
+    int dist1 = std::distance(inicio1, i);
+    int dist2 = std::distance(inicio2, i);
+
+    // atualizar retorno da estrategia
+    if (s.mean(dados.begin() + inicio1, dados.begin() + i) > s.mean(dados.begin() + inicio2, dados.begin() + i))
+      retorno += s.dados[i + 1]->open - s.dados[i + 1]->close;
     else
-    {
-      retorno *= acao.getData(i).getPreco()/acao.getData(i+1).getPreco();
-    }
+      retorno += s.dados[i + 1]->close - s.dados[i + 1]->open;
+
   }
   return retorno;
 }
@@ -180,9 +185,9 @@ void Population::crossover(int TAM_INTERVAL)
     if (r1 == r2) continue;
 
     if (rand()%2 == 0)
-      addIndividual(Individual(melhores.individuos[r1].MA1, melhores.individuos[r2].MA2));
+      addIndividual(Individual(melhores.individuos[r1]->long, melhores.individuos[r2]->short));
     else
-      addIndividual(Individual(melhores.individuos[r2].MA1, melhores.individuos[r1].MA2));
+      addIndividual(Individual(melhores.individuos[r2]->long, melhores.individuos[r1]->short));
   }
 
 //  melhores.assassinar();
@@ -204,16 +209,17 @@ void Population::mutation(double MUTATION_PROBABILITY)
     // 1 e max_ma
 
     if( (double) rand()/(RAND_MAX) <= MUTATION_PROBABILITY )
-      individuos[i].MA1 = 1 + rand()%(max_ma);
+      individuos[i].long = 1 + rand()%(max_ma);
     if( (double) rand()/ (RAND_MAX) <= MUTATION_PROBABILITY )
-      individuos[i].MA2 = 1 + rand()%(max_ma);
+      individuos[i].short = 1 + rand()%(max_ma);
 
+    if (individuos[i].long < individuos[i].short) std::swap(individuos[i].long , individuos[i].short);
 
     // Impedir que hajam duas crianças iguais
     // Para que nao tenhamos duas estrategias iguais
     for(int j = 0; j < i; j++)
     {
-      if ( individuos[i].MA1 == individuos[j].MA1 && individuos[i].MA2 == individuos[j].MA2 )
+      if ( individuos[i].long == individuos[j].long && individuos[i].short == individuos[j].short )
        { i--; break; }
     }
   }

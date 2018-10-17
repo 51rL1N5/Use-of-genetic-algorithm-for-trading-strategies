@@ -7,8 +7,10 @@ Individual::Individual() {}
 
 Individual::Individual(int i, int j)
 {
-  this->MA1 = std::max(i,0);
-  this->MA2 = std::max(j,0);
+  if (i < 0 || j < 0) throw Error("Parametros invalidos","Tentativa de colocar media a longo prazo negativa");
+
+  this->long = std::min(i,j);
+  this->short = std::max(i,j);
   retorno   = 0.00;
 }
 ///////////////////////////////////////////

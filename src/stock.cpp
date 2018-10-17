@@ -100,22 +100,23 @@ void Stock::popLeft()
 
 }
 
-double Stock::mean()
+double Stock::mean(std::vector<Quote*>::iterator inicio, std::vector<Quote*>::iterator fim)
 {
   if (!filled) return 0.0;
 
-  double m = 0.0;
+  double m = data[0]->adjclosed;
 
-  for (int i = 0; i < filled; i++)
-    m+= this->data[i].getPreco();
+  double alpha = 2 / (1 + filled);
 
-  return m/filled;
+  for (auto i = inicio; i != fim; i++)
+    m = alpha * ((*i)->adjclosed) + (1 - alpha)*m;
 
+  return m;
 }
 
 Stock Stock::sample(int inicio, int fim)
 {
-
+  // trabalhar com iterators ao invés dessa porra aí de criar stock
   if (inicio > fim || inicio < 0 || fim >= filled)
   {
     std::cout << inicio << " " << fim  <<'\n';
@@ -133,20 +134,22 @@ Stock Stock::sample(int inicio, int fim)
 }
 
 
-void Stock::movingAverage(int MA_TAM, std::string filename)
+void Stock::movingAverage(int MA_TAM, std::string filename, std::string filename2)
 {
   double MA[filled] = { 0.00 };
 
-  for (int i = 0; i < filled; i++)
-  {
-    for (int j = 0; j < MA_TAM; j++)
-      MA[i] += (this->data[std::max(i - j, j)].getPreco())/(MA_TAM+1);
-  }
+  MA[0] = this->data[0]->adjclosed;
 
+  double alpha = 2 / (1 + MA_TAM);
 
-  std::ofstream file(filename);
+  for (int i = 1; i < filled; i++)
+    MA[i] = alpha * this->data[i]->adclosed + (1 - alpha) * MA[i-1];
+
+  std::ofstream file(filename), file2(filename2);
 
   assert(file.is_open());
+  assert(file2.is_open());
+
 
   for (int i = 0; i < filled; i++)
     file << this->data[i].getData() << ", " <<MA[i] << std::endl;

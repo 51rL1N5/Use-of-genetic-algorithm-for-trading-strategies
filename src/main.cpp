@@ -102,8 +102,8 @@ Population geneticAlgorithm (Stock teste,Stock stock, const int max_population, 
     pop.individuos[j].retorno =pop.retorno(j);
 
 
-  teste.movingAverage(pop.individuos[0].MA1, "resultados/moving1.csv");
-  teste.movingAverage(pop.individuos[0].MA2, "resultados/moving2.csv");
+  teste.movingAverage(pop.individuos[0].long, "resultados/moving1.csv");
+  teste.movingAverage(pop.individuos[0].short, "resultados/moving2.csv");
 
   std::cout << (pop.top20(TAM_INTERVAL).individuos[0]) << '\n';
   std::cout << " Fim"<< std::endl;

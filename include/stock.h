@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "quote.h"
+#include <vector>
 
 class Stock
 {
@@ -26,12 +27,12 @@ public:
 // Operadores sobre a acao ////////////////////////
   void addData(Quote q);
   void popLeft();
-  double mean();
+  double mean(std::vector<Quote*>::iterator inicio, std::vector<Quote*>::iterator fim);
   Stock sample(int inicio, int fim);
 
 // Visualizacao ///////////////////////////////////
 
-void movingAverage(int MA_TAM, std::string filename);
+void movingAverage(int MA_TAM, std::string filename, std::string filename2);
 friend std::ostream& operator<<(std::ostream& ostream, Stock& s);
 
 
