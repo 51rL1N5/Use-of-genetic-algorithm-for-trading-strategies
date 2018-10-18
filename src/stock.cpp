@@ -27,12 +27,31 @@ Stock::Stock(std::string nome)
 
 }
 
-
-Stock::~Stock(){
-    for(int i=0;i<data.size();i++)
-        delete data[i];
+Stock::Stock(std::string nome,std::vector<Quote*> _data){
+    this->nome = nome;
+    this->data = _data;
+    this->size = _data.size();
+    this->filled = this->size;
 }
-
+Stock::~Stock(){
+    for(int i=0;i<data.size();i++){
+        delete data[i];
+    }
+    data.clear();
+}
+Stock& Stock::operator=(const Stock &S)
+{
+    std::cout << "construtor =====\n";
+    this->nome = S.nome;
+    this->size = S.data.size();
+    this->filled = this->size;
+    this->data.clear();
+    for(auto it:S.data){
+        Quote* qaux = new Quote(*it);
+        this->addData(qaux);
+    }
+    return *this;
+}
 ///////////////////////////////////////////////
 
 // Get ////////////////////////////////////////
@@ -49,6 +68,7 @@ void Stock::addData(Quote *q)
   if(q == NULL) return;//Lançar erro talvez
   data.push_back(q);
   size++;
+  filled++;
 }
 
 double Stock::mean()
@@ -67,6 +87,7 @@ double Stock::mean()
 
 Stock Stock::sample(int inicio, int fim)
 {
+    std::cout << inicio << " " << fim  <<"  "<<filled << '\n';
   if (inicio > fim || inicio < 0 || fim >= filled)
   {
     std::cout << inicio << " " << fim  <<'\n';
@@ -74,10 +95,12 @@ Stock Stock::sample(int inicio, int fim)
   }
 
   Stock S(this->nome);
-
+std::cout << "ok no sample" <<std::endl;
   for (int i = inicio; i <= fim; i++)
   {
-    S.addData(this->data[i]);
+    Quote* qaux = new Quote(*(this->data[i]));
+    std::cout << "ok no sample" <<std::endl;
+    S.addData(qaux);
   }
 
   return S;
@@ -88,7 +111,6 @@ void Stock::movingAverage(int MA_TAM, std::string filename)
   double MA[filled] = { 0.00 };
 
   MA[0] = this->data[0]->adjclose;
-
   double alpha = 2 / (1 + MA_TAM);
 
   for (int i = 1; i < filled; i++)

@@ -20,35 +20,62 @@ Population::Population() {}
 
 Population::Population(Stock S, int s, int ma)
 {
+std::cout << "construtor pop" <<std::endl;
   this->size   =  s;
+  std::cout << "construtor pop" <<std::endl;
   this->acao  =  S;
+  std::cout << "construtor pop" <<std::endl;
   this->filled =  0;
+  std::cout << "construtor pop" <<std::endl;
   this->max_ma = ma;
 
-  for (int i = 0; i < this->size; i++)
-    individuos.push_back(new Individual(0,0));
-
-  individuos.shrink_to_fit();
+  // for (int i = 0; i < this->size; i++)
+  //   individuos.push_back(new Individual(0,0));
+  //
+  // individuos.shrink_to_fit();
 }
 /////////////////////////////////////
 
+Population& Population::operator=(const Population &pop)
+{
+    std::cout << "construtor ===== Populacao\n";
+    this->size   =  pop.size;
+    this->acao  =  pop.acao;
+    this->filled =  pop.filled;
+    this->max_ma = pop.max_ma;
+    this->individuos.clear();
+    for(auto it:pop.individuos){
+        Individual* Indaux = new Individual(*it);
+        this->addIndividual(Indaux);
+    }
+    return *this;
+}
+
 Population::~Population()
 {
-  for (int i = 0; i < filled; i++)
+  for (int i = 0; i < filled; i++){
     delete individuos[i];
+    }
+    individuos.clear();
+
 }
 
 int Population::getFilled() { return this->filled; }
 
 // Operadores sobre a populacao /////
 
-void Population::addIndividual(Individual ind)
-{ this->individuos[filled] = &ind; filled++;}
+void Population::addIndividual(Individual *ind)
+{
+    if(ind == NULL) return;
+    individuos.push_back(ind);
+    size++;
+    filled++;
+}
 
 void Population::assassinar()
 { delete this; }
 
-double Population::fitness(Stock & s, int ind, int inicio)
+double Population::fitness(Stock &s, int ind, int inicio)
 {
 
   if (ind < 0 || ind >= filled)
@@ -112,9 +139,11 @@ Population Population::top20(int TAM_INTERVAL)
 {
 
   // Gerar a populacao com os 20% melhores
+  std::cout << "top20 filled = "<<this->size <<std::endl;
   int top20 = floor(0.2 * filled);
 
-  Population pop = Population(acao, top20, max_ma);
+  Population pop;
+  std::cout << "top20 depois de POP "<<std::endl;
   /////////////////////////////////////////////////
 
   // Selecionar um intervalo aletorio de tamanho TAM_INTERVAL
@@ -129,16 +158,17 @@ Population Population::top20(int TAM_INTERVAL)
 
   Stock S = acao.sample(std::max(0, r - max_ma), r + TAM_INTERVAL);
 
-  for (int i = 0; i < filled; i++)
+  for (int i = 0; i < filled; i++){
     individuos[i]->retorno = fitness(S, i, max_ma);
-
+    std::cout << "fit = "<< individuos[i]->retorno <<std::endl;
+}
 
 
   for (int i=0; i<top20; i++)
   {
   	for (int j=i+1; j<filled; j++)
     {
-  		if (individuos[j]->retorno>individuos[i]->retorno)
+  		if (individuos[j]->retorno > individuos[i]->retorno)
       {
   			// Switch values between organisms[i] and organisms[j]
   			Individual* temp=individuos[i];
@@ -146,7 +176,7 @@ Population Population::top20(int TAM_INTERVAL)
   			individuos[j]=temp;
   		}
   	}
-  	pop.addIndividual(*individuos[i]);
+  	pop.addIndividual(individuos[i]);
   }
 /*
   std::sort(individuos, individuos + filled - 1, [](Individual a, Individual b){
@@ -162,14 +192,14 @@ Population Population::top20(int TAM_INTERVAL)
 
 void Population::crossover(int TAM_INTERVAL)
 {
-
+    std::cout << "crossover 1" <<std::endl;
   Population melhores = top20(TAM_INTERVAL);
   filled = 0;
-
+  std::cout << "crossover 2" <<std::endl;
   // Perpertuar a especie com os 20 melhores
   for(int i = 0; i < melhores.size; i++)
-    addIndividual(*(melhores.individuos[i]));
-
+    addIndividual((melhores.individuos[i]));
+std::cout << "crossover 3" <<std::endl;
   while ( filled != size)
   {
     // gerar os reprodutores
@@ -179,10 +209,17 @@ void Population::crossover(int TAM_INTERVAL)
     // impedir que os dois reprodutores sejam iguais
     if (r1 == r2) continue;
 
-    if (rand()%2 == 0)
-      addIndividual(Individual(melhores.individuos[r1]->Mlong, melhores.individuos[r2]->Mshort));
-    else
-      addIndividual(Individual(melhores.individuos[r2]->Mlong, melhores.individuos[r1]->Mshort));
+    if (rand()%2 == 0){
+        Individual *temp =  new Individual(melhores.individuos[r1]->Mlong, melhores.individuos[r2]->Mshort);
+        addIndividual(temp);
+
+    }
+
+    else{
+        Individual *temp =  new Individual(melhores.individuos[r2]->Mlong, melhores.individuos[r1]->Mshort);
+        addIndividual(temp);
+
+    }
   }
 
 //  melhores.assassinar();

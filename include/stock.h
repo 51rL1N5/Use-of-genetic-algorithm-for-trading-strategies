@@ -4,6 +4,7 @@
 #include <iostream>
 #include "quote.h"
 #include <vector>
+
 class Stock
 {
 public:
@@ -15,6 +16,8 @@ public:
 
   Stock();                          // constructor
   Stock(std::string nome);
+  Stock(std::string nome,std::vector<Quote*> data);
+  Stock& operator=(const Stock &S);
   ~Stock();
 
 // Set e get //////////////////////////////////////

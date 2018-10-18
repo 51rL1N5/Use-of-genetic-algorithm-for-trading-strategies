@@ -26,11 +26,12 @@ Population geneticAlgorithm(Stock teste, Stock S, const int max_population, cons
 // Declaracao de funcoes ////////////////////
 Population randomPopulation(Stock S, const int max_population, const int max_ma)
 {
-  Population pop = Population(S, max_population, max_ma);
+  Population pop(S, max_population, max_ma);
 
-  for (int i = 0; i < max_population; i++)
-    pop.addIndividual( Individual(1 + rand()%(max_ma), 1 + rand()%(max_ma)));
-
+  for (int i = 0; i < max_population; i++){
+    Individual *IndAux = new Individual(1 + rand()%(max_ma), 1 + rand()%(max_ma));
+    pop.addIndividual(IndAux);
+    }
   return pop;
 }
 
@@ -74,7 +75,7 @@ Population geneticAlgorithm (Stock stock, const int max_population, const int ma
   {
 
     pop.crossover(TAM_INTERVAL);
-
+ 
     pop.mutation(MUTATION_PROBABILITY);
 
     std::cout << "\r" << "Geracao numero " << i << "/" <<number_generations << std::flush;
@@ -113,8 +114,12 @@ int main(int argc, char** argv)
 
   Stock SP500 = loadData("GSPC.dat");
 //  Stock MA_SP500 = loadData("dataTeste.dat");
+    //std::cout << "oi\n";
+    Stock SPsample = SP500.sample(0, floor(0.6 * SP500.data.size()));
 
-  Population pop = geneticAlgorithm(SP500.sample(0, floor(0.6 * SP500.getFilled())), POPULATION_SIZE, MAX_MOVING_AVERAGE, NUMBER_OF_GENERATIONS, TAM_INTERVAL, MUTATION_PROBABILITY);
+    //std::cout << "oi = " << SPsample.getFilled();
+    //std::cout << SPsample.data.size() << std::endl;
+  Population pop = geneticAlgorithm(SPsample, POPULATION_SIZE, MAX_MOVING_AVERAGE, NUMBER_OF_GENERATIONS, TAM_INTERVAL, MUTATION_PROBABILITY);
 
   return 0;
 }
